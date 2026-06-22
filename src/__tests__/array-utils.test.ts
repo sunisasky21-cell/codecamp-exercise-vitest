@@ -1,63 +1,61 @@
-import { describe, it, expect , test} from "vitest";
+import { describe, expect, test } from "vitest";
 import { unique, chunk, flatten, groupBy } from "../array-utils";
 
 describe("array-utils", () => {
   describe("unique", () => {
-    test("กรณีมีตัวซ้ำ ต้องลบออกให้เหลือตัวเดียว", () => {
+    test("should remove duplicate values", () => {
       expect(unique([1, 2, 2, 3, 3, 3])).toEqual([1, 2, 3]);
     });
 
-    test("กรณีไม่มีตัวซ้ำ ต้องได้ค่าเดิม", () => {
+    test("should return the same array if no duplicates", () => {
       expect(unique([1, 2, 3])).toEqual([1, 2, 3]);
     });
 
-    test("กรณีเป็นอาเรย์ว่าง ต้องได้อาเรย์ว่าง", () => {
+    test("should return an empty array when input is empty", () => {
       expect(unique([])).toEqual([]);
     });
   });
 
   describe("chunk", () => {
-   test("หั่นอาเรย์แบบแบ่งกลุ่มได้ลงตัวพอดี", () => {
+    test("should split array evenly", () => {
       expect(chunk([1, 2, 3, 4], 2)).toEqual([[1, 2], [3, 4]]);
     });
 
-    test("หั่นอาเรย์แบบเหลือเศษกลุ่มสุดท้าย", () => {
+    test("should split array with remaining elements", () => {
       expect(chunk([1, 2, 3, 4, 5], 2)).toEqual([[1, 2], [3, 4], [5]]);
     });
 
-    test("กำหนดขนาดใหญ่กว่าความยาวอาเรย์ ต้องได้อาเรย์เดิมซ้อนชั้นเดียว", () => {
+    test("should return original array in single chunk if size > length", () => {
       expect(chunk([1, 2], 5)).toEqual([[1, 2]]);
     });
 
-    test("ถ้าใส่ขนาดเป็น 0 หรือติดลบ ต้องแจ้งเตือน Error", () => {
+    test("should throw error if size is invalid", () => {
       expect(() => chunk([1, 2], 0)).toThrow();
     });
   });
 
   describe("flatten", () => {
-    test("ทุบอาเรย์ที่ซ้อนกันหลายชั้นให้แบนราบ", () => {
+    test("should flatten nested arrays shallowly", () => {
       expect(flatten([1, [2, 3], [4, [5]]])).toEqual([1, 2, 3, 4, [5]]);
     });
 
-    test("ถ้าอาเรย์แบนอยู่แล้ว ต้องได้ค่าเดิม", () => {
+    test("should return same array if already flat", () => {
       expect(flatten([1, 2, 3])).toEqual([1, 2, 3]);
     });
 
-    test("ถ้าเป็นอาเรย์ว่าง ต้องได้อาเรย์ว่าง", () => {
+    test("should return empty array if input is empty", () => {
       expect(flatten([])).toEqual([]);
     });
   });
 
   describe("groupBy", () => {
-   test("จัดกลุ่มวัตถุตามคีย์ที่กำหนด", () => {
+    test("should group objects by a key", () => {
       const employees = [
         { name: "Anna", department: "IT" },
         { name: "John", department: "HR" },
         { name: "Jack", department: "IT" }
       ];
-
       const result = groupBy(employees, "department");
-
       expect(result).toEqual({
         IT: [{ name: "Anna", department: "IT" }, { name: "Jack", department: "IT" }],
         HR: [{ name: "John", department: "HR" }]

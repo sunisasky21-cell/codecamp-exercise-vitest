@@ -1,59 +1,59 @@
-import { describe, it, expect , test} from "vitest";
+import { describe, expect, test } from "vitest";
 import { capitalize, slugify, truncate, countWords } from "../strings";
 
 describe("strings", () => {
   describe("capitalize", () => {
-    test("ข้อความปกติ ควรเปลี่ยนตัวแรกเป็นพิมพ์ใหญ่", () => {
+    test("should capitalize normal string", () => {
       expect(capitalize("hello")).toBe("Hello");
     });
 
-    test("ถ้าเป็นข้อความว่าง ควรได้ข้อความว่างกลับมา", () => {
+    test("should handle empty string", () => {
       expect(capitalize("")).toBe("");
     });
 
-    test("ถ้ามีตัวอักษรเดียว ควรเปลี่ยนเป็นพิมพ์ใหญ่ได้", () => {
+    test("should capitalize single character", () => {
       expect(capitalize("a")).toBe("A");
     });
   });
 
   describe("slugify", () => {
-    test("ข้อความปกติ ควรแปลงเป็นพิมพ์เล็กและเชื่อมด้วยขีดกลาง", () => {
+    test("should slugify normal string", () => {
       expect(slugify("Hello World")).toBe("hello-world");
     });
 
-    test("ถ้ามีตัวอักษรพิเศษหรือสัญลักษณ์ ควรจะลบออกหรือจัดการให้ถูกต้อง", () => {
+    test("should remove special characters", () => {
       expect(slugify("Hello World!")).toBe("hello-world");
     });
 
-    test("ถ้ามีช่องว่างหลายช่อง ควรจะยุบให้เหลือขีดเดียว", () => {
-      expect(slugify("hello world")).toBe("hello-world");
+    test("should collapse multiple spaces", () => {
+      expect(slugify("hello   world")).toBe("hello-world");
     });
   });
 
   describe("truncate", () => {
-    test("ถ้าข้อความสั้นกว่าขนาดที่กำหนด ไม่ควรโดนตัด", () => {
+    test("should not truncate short string", () => {
       expect(truncate("hello", 10)).toBe("hello");
     });
 
-    test("ถ้าข้อความยาวเกินกำหนด ควรตัดให้เหลือตามขนาดแล้วต่อด้วย ...", () => {
+    test("should truncate long string and append dots", () => {
       expect(truncate("hello world", 5)).toBe("he...");
     });
 
-    test("ถ้าความยาวพอดีเป๊ะ ควรแสดงข้อความเต็มตามความยาวนั้น", () => {
+    test("should handle exact length string", () => {
       expect(truncate("hello", 5)).toBe("hello");
     });
   });
 
   describe("countWords", () => {
-    test("ข้อความปกติ ควรรวมจำนวนคำได้ถูกต้อง", () => {
+    test("should count words in normal string", () => {
       expect(countWords("hello world inside")).toBe(3);
     });
 
-    test("ถ้าเป็นข้อความว่าง ควรได้ 0 คำ", () => {
+    test("should return zero for empty string", () => {
       expect(countWords("")).toBe(0);
     });
 
-    test("ถ้ามีช่องว่างเยอะเกินไป ควรนับเฉพาะคำจริงๆ ไม่นับช่องว่าง", () => {
+    test("should ignore multiple spaces", () => {
       expect(countWords("  hello   world  ")).toBe(2);
     });
   });
